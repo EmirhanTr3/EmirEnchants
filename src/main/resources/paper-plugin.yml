@@ -1,0 +1,7 @@
+name: EmirEnchants
+version: '1.0-SNAPSHOT'
+main: xyz.emirdev.emirenchants.EmirEnchants
+api-version: '1.21'
+load: STARTUP
+authors: [ EmirhanTr3 ]
+bootstrapper: xyz.emirdev.emirenchants.Bootstrap
