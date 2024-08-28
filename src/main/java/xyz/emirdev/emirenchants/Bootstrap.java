@@ -7,15 +7,18 @@ import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.event.RegistryEvents;
+import io.papermc.paper.registry.event.RegistryFreezeEvent;
 import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
 import io.papermc.paper.registry.tag.TagKey;
 import net.kyori.adventure.key.Key;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemType;
 import org.jetbrains.annotations.NotNull;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 
-import static net.kyori.adventure.text.Component.text;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 @SuppressWarnings("all")
 public class Bootstrap implements PluginBootstrap {
@@ -26,18 +29,43 @@ public class Bootstrap implements PluginBootstrap {
 
         final LifecycleEventManager<BootstrapContext> manager = context.getLifecycleManager();
         manager.registerEventHandler(RegistryEvents.ENCHANTMENT.freeze(), event -> {
-            event.registry().register(reachEnchant, b -> b
-                    .description(text("Reach"))
-                    .supportedItems(event.getOrCreateTag(enchantableMiningTag))
-                    .primaryItems(event.getOrCreateTag(enchantableMiningTag))
-                    .weight(100)
-                    .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 10))
-                    .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(30, 10))
-                    .anvilCost(4)
-                    .maxLevel(3)
-                    .activeSlots(EquipmentSlotGroup.MAINHAND)
-            );
+            context.getLogger().info("Loading enchantments...");
+
+            for (Class<?> clazz: new Reflections("xyz.emirdev.emirenchants.enchantments", new SubTypesScanner(false))
+                .getSubTypesOf(CustomEnchantment.class)) {
+
+                // get enchantment key
+                TypedKey<Enchantment> key;
+                try {
+                    key = (TypedKey<Enchantment>) clazz.getDeclaredField("key").get(null);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    context.getLogger().error("Couldn't find the enchantment key in "+clazz.getName().replace("xyz.emirdev.emirenchants.enchantments.", "")+": ", e);
+                    continue;
+                }
+
+                // get builder method
+                Method builderMethod;
+                try {
+                    builderMethod = clazz.getDeclaredMethod("builder", RegistryFreezeEvent.class, EnchantmentRegistryEntry.Builder.class);
+                } catch (NoSuchMethodException e) {
+                    context.getLogger().error("Couldn't find the enchantment builder method in "+clazz.getName().replace("xyz.emirdev.emirenchants.enchantments.", "")+": ", e);
+                    continue;
+                }
+
+                // register enchantment
+                event.registry().register(key, builder -> {
+                    try {
+                        builderMethod.invoke(null, event, builder);
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        context.getLogger().error("Couldn't find the enchantment data in "+clazz.getName().replace("xyz.emirdev.emirenchants.enchantments.", "")+": ", e);
+                    }
+                });
+
+                String className = clazz.getName().replace("xyz.emirdev.emirenchants.enchantments.", "");
+                context.getLogger().info("Registered enchantment in class " + className + " named " + key.key().value());
+            }
+
+            context.getLogger().info("Loaded enchantments successfully");
         });
-        context.getLogger().info("Registered reach enchantment.");
     }
 }

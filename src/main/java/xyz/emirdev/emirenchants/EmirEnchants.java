@@ -6,11 +6,6 @@ public final class EmirEnchants extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getLogger().info("Loaded.");
-    }
-
-    @Override
-    public void onDisable() {
-        getLogger().info("Unloaded.");
+        getLogger().info("Loaded successfully.");
     }
 }
