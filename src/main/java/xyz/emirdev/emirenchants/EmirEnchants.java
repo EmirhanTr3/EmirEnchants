@@ -4,13 +4,12 @@ import io.papermc.paper.registry.TypedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,16 +45,11 @@ public final class EmirEnchants extends JavaPlugin {
         for (Class<?> clazz: new Reflections("xyz.emirdev.emirenchants.enchantments", new SubTypesScanner(false))
                 .getSubTypesOf(CustomEnchantment.class)) {
 
-            Constructor constructor = null;
-            try {
-                constructor = clazz.getConstructor();
-            } catch (NoSuchMethodException e) {
-                continue;
-            }
+            if (!Arrays.stream(clazz.getInterfaces()).toList().contains(Listener.class)) continue;
 
             try {
-                getServer().getPluginManager().registerEvents((Listener) constructor.newInstance(), this);
-            } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+                getServer().getPluginManager().registerEvents((Listener) clazz.getConstructor().newInstance(), this);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
                 getLogger().log(Level.SEVERE, "Couldn't register event in " + clazz.getName().replace("xyz.emirdev.emirenchants.enchantments.", "") + ": ", e);
                 continue;
             }

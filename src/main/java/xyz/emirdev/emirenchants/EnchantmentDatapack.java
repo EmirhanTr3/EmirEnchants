@@ -28,11 +28,11 @@ public class EnchantmentDatapack {
                     String.format("""
                         {
                             "values": [
-                              %s
+                                %s
                             ]
                         }
                         """,
-                            EmirEnchants.getEnchantments().stream().map(key -> "\"" + key.key().key() + "\"").collect(Collectors.joining(",\n"))
+                            EmirEnchants.getEnchantments().stream().map(key -> "\"" + key.key().key() + "\"").collect(Collectors.joining(",\n        "))
                     )
             );
             eWriter.close();
