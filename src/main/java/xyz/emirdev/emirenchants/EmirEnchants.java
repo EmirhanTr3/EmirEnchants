@@ -54,7 +54,7 @@ public final class EmirEnchants extends JavaPlugin {
                 continue;
             }
 
-            getLogger().info("Registered event in " + clazz.getName().replace("xyz.emirdev.emirenchants.enchantments.", "") + ".");
+            getLogger().info("Registered events in " + clazz.getName().replace("xyz.emirdev.emirenchants.enchantments.", "") + ".");
         }
 
         getLogger().info("Loaded successfully.");
