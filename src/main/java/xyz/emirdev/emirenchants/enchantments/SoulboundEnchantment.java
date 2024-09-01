@@ -40,7 +40,7 @@ public class SoulboundEnchantment extends CustomEnchantment implements Listener 
     }
 
     @EventHandler
-    public void deathEvent(PlayerDeathEvent event) {
+    public void onPlayerDeath(PlayerDeathEvent event) {
         if (event.getKeepInventory()) return;
         List<ItemStack> drops = event.getDrops();
         List<ItemStack> itemsToKeep = new ArrayList<>();
