@@ -46,7 +46,6 @@ public class DrillEnchantment extends CustomEnchantment implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        PlayerInventory inventory = player.getInventory();
         if (!player.getInventory().getItemInMainHand().containsEnchantment(Registry.ENCHANTMENT.get(key))) return;
         if (ignoredEventPlayers.contains(player)) return;
 
