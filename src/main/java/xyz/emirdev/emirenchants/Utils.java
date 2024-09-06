@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -35,5 +36,9 @@ public class Utils {
         } else {
             block.getWorld().dropItem(block.getLocation().add(0.5, 0.5, 0.5), item);
         }
+    }
+
+    public static int getRandomNumber(int min, int max) {
+        return new SecureRandom().nextInt(max - min + 1) + min;
     }
 }
