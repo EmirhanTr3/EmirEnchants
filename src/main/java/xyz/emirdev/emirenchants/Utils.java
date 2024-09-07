@@ -14,6 +14,8 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 public class Utils {
@@ -23,6 +25,12 @@ public class Utils {
 
     public static TypedKey<Enchantment> createEnchantmentKey(String key) {
         return TypedKey.create(RegistryKey.ENCHANTMENT, Key.key("emirenchants", key));
+    }
+
+    public static void giveOrDrop(Player player, Block block, Collection<ItemStack> items) {
+        for (ItemStack item : items) {
+            giveOrDrop(player, block, item);
+        }
     }
 
     public static void giveOrDrop(Player player, Block block, ItemStack item) {
