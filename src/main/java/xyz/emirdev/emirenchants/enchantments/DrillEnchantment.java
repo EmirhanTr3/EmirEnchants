@@ -78,22 +78,10 @@ public class DrillEnchantment extends CustomEnchantment implements Listener {
 
         Material blockType = event.getBlock().getType();
 
-        int x1 = corner1.getBlockX(), y1 = corner1.getBlockY(), z1 = corner1.getBlockZ();
-        int x2 = corner2.getBlockX(), y2 = corner2.getBlockY(), z2 = corner2.getBlockZ();
-        int lowestX = Math.min(x1, x2);
-        int lowestY = Math.min(y1, y2);
-        int lowestZ = Math.min(z1, z2);
-        int highestX = lowestX == x1 ? x2 : x1;
-        int highestY = lowestX == y1 ? y2 : y1;
-        int highestZ = lowestX == z1 ? z2 : z1;
-        for (int x = lowestX; x <= highestX; x++) {
-            for (int y = lowestY; y <= highestY; y++) {
-                for (int z = lowestZ; z <= highestZ; z++) {
-                    Block block = event.getBlock().getWorld().getBlockAt(x, y, z);
-                    if (block.getType() != blockType) continue;
-                    event.getPlayer().breakBlock(block);
-                }
-            }
+        for (Location location : Utils.getLocationsBetween(corner1, corner2)) {
+            Block block = event.getBlock().getWorld().getBlockAt(location);
+            if (block.getType() != blockType) continue;
+            event.getPlayer().breakBlock(block);
         }
 
         Bukkit.getServer().getScheduler().runTaskLater(EmirEnchants.getInstance(), () -> {

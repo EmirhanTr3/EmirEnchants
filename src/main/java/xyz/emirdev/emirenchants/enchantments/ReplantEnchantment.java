@@ -53,7 +53,6 @@ public class ReplantEnchantment extends CustomEnchantment implements Listener {
                     case WHEAT -> Material.WHEAT_SEEDS;
                     case CARROTS -> Material.CARROT;
                     case BEETROOTS -> Material.BEETROOT_SEEDS;
-                    case TORCHFLOWER -> Material.TORCHFLOWER_SEEDS;
                     case POTATOES -> Material.POTATO;
                     case NETHER_WART -> Material.NETHER_WART;
 
