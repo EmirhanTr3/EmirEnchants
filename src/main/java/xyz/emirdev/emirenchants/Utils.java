@@ -2,6 +2,7 @@ package xyz.emirdev.emirenchants;
 
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
+import io.papermc.paper.registry.tag.TagKey;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -11,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.Vector;
 
@@ -26,10 +28,18 @@ public class Utils {
         return TypedKey.create(RegistryKey.ENCHANTMENT, Key.key("emirenchants", key));
     }
 
+    public static TagKey<ItemType> createItemTagKey(String key) {
+        return TagKey.create(RegistryKey.ITEM, Key.key("emirenchants", key));
+    }
+
     public static void giveOrDrop(Player player, Block block, Collection<ItemStack> items) {
         for (ItemStack item : items) {
             giveOrDrop(player, block, item);
         }
+    }
+
+    public static void giveOrDrop(Player player, Location location, ItemStack item) {
+        giveOrDrop(player, location.getBlock(), item);
     }
 
     public static void giveOrDrop(Player player, Block block, ItemStack item) {

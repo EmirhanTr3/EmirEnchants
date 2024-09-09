@@ -1,10 +1,8 @@
 package xyz.emirdev.emirenchants.enchantments;
 
-import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.event.RegistryFreezeEvent;
-import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
 import io.papermc.paper.registry.tag.TagKey;
 import org.bukkit.Registry;
 import org.bukkit.block.Block;
@@ -12,11 +10,9 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemType;
@@ -24,13 +20,14 @@ import org.bukkit.metadata.FixedMetadataValue;
 import xyz.emirdev.emirenchants.CustomEnchantment;
 import xyz.emirdev.emirenchants.EmirEnchants;
 import xyz.emirdev.emirenchants.Utils;
+import xyz.emirdev.emirenchants.tags.BowCrossbowTag;
 
 import java.util.List;
 
 @SuppressWarnings("all")
 public class LightningEnchantment extends CustomEnchantment implements Listener {
     public static TypedKey<Enchantment> key = Utils.createEnchantmentKey("lightning");
-    private static TagKey<ItemType> items = TagKey.create(RegistryKey.ITEM, ItemTypeTagKeys.ENCHANTABLE_BOW.key());
+    private static TagKey<ItemType> items = BowCrossbowTag.key;
 
     public static void builder(RegistryFreezeEvent event, EnchantmentRegistryEntry.Builder builder) {
         builder
