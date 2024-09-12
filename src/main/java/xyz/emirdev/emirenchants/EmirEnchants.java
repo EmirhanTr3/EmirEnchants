@@ -8,6 +8,7 @@ import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +45,11 @@ public final class EmirEnchants extends JavaPlugin {
 
         for (Class<?> clazz: new Reflections("xyz.emirdev.emirenchants.enchantments", new SubTypesScanner(false))
                 .getSubTypesOf(CustomEnchantment.class)) {
+
+            try {
+                Method initMethod = clazz.getDeclaredMethod("run");
+                initMethod.invoke(null);
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {}
 
             if (!Arrays.stream(clazz.getInterfaces()).toList().contains(Listener.class)) continue;
 

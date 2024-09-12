@@ -35,7 +35,7 @@ public class EnderVisionEnchantment extends CustomEnchantment implements Listene
                 .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(30, 4))
                 .anvilCost(4)
                 .maxLevel(1)
-                .activeSlots(EquipmentSlotGroup.MAINHAND);
+                .activeSlots(EquipmentSlotGroup.HEAD);
     }
 
     @EventHandler
