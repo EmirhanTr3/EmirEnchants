@@ -48,7 +48,7 @@ public class EntityReachEnchantment extends CustomEnchantment {
         ItemStack newItem = player.getInventory().getItem(event.getNewSlot());
 
         NamespacedKey modifierKey = new NamespacedKey("emirenchants", "entity_reach");
-        AttributeInstance attribute = player.getAttribute(Attribute.PLAYER_ENTITY_INTERACTION_RANGE);
+        AttributeInstance attribute = player.getAttribute(Attribute.ENTITY_INTERACTION_RANGE);
 
         if (prevItem != null && prevItem.containsEnchantment(Registry.ENCHANTMENT.get(key))) {
             AttributeModifier modifier = new AttributeModifier(
@@ -82,7 +82,7 @@ public class EntityReachEnchantment extends CustomEnchantment {
 
     public static void checkItem(Player player, ItemStack item) {
         NamespacedKey modifierKey = new NamespacedKey("emirenchants", "entity_reach");
-        AttributeInstance attribute = player.getAttribute(Attribute.PLAYER_ENTITY_INTERACTION_RANGE);
+        AttributeInstance attribute = player.getAttribute(Attribute.ENTITY_INTERACTION_RANGE);
         AttributeModifier modifier = new AttributeModifier(
                 modifierKey,
                 item.getEnchantmentLevel(Registry.ENCHANTMENT.get(key)),

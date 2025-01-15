@@ -60,7 +60,7 @@ public class HealthEnchantment extends CustomEnchantment implements Listener {
 
     public void checkArmor(Player player, String mKey, ItemStack prevItem, ItemStack newItem) {
         NamespacedKey modifierKey = new NamespacedKey("emirenchants", mKey);
-        AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        AttributeInstance attribute = player.getAttribute(Attribute.MAX_HEALTH);
 
         if (prevItem != null && prevItem.containsEnchantment(Registry.ENCHANTMENT.get(key))) {
             AttributeModifier modifier = new AttributeModifier(

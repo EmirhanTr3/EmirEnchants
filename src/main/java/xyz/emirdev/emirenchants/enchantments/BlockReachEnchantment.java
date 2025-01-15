@@ -49,7 +49,7 @@ public class BlockReachEnchantment extends CustomEnchantment implements Listener
         ItemStack newItem = player.getInventory().getItem(event.getNewSlot());
 
         NamespacedKey modifierKey = new NamespacedKey("emirenchants", "block_reach");
-        AttributeInstance attribute = player.getAttribute(Attribute.PLAYER_BLOCK_INTERACTION_RANGE);
+        AttributeInstance attribute = player.getAttribute(Attribute.BLOCK_INTERACTION_RANGE);
 
         if (prevItem != null && prevItem.containsEnchantment(Registry.ENCHANTMENT.get(key))) {
             AttributeModifier modifier = new AttributeModifier(
@@ -83,7 +83,7 @@ public class BlockReachEnchantment extends CustomEnchantment implements Listener
 
     public static void checkItem(Player player, ItemStack item) {
         NamespacedKey modifierKey = new NamespacedKey("emirenchants", "block_reach");
-        AttributeInstance attribute = player.getAttribute(Attribute.PLAYER_BLOCK_INTERACTION_RANGE);
+        AttributeInstance attribute = player.getAttribute(Attribute.BLOCK_INTERACTION_RANGE);
         AttributeModifier modifier = new AttributeModifier(
                 modifierKey,
                 item.getEnchantmentLevel(Registry.ENCHANTMENT.get(key)),
