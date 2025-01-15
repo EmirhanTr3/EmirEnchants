@@ -18,11 +18,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.*;
 import xyz.emirdev.emirenchants.CustomEnchantment;
 import xyz.emirdev.emirenchants.Utils;
 import xyz.emirdev.emirenchants.tags.ToolsTag;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -80,13 +82,25 @@ public class TelekinesisEnchantment extends CustomEnchantment implements Listene
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
         List<ItemStack> drops = event.getDrops();
+        List<ItemStack> itemsToKeep = new ArrayList<>();
 
         if (event.getDamageSource().getCausingEntity() instanceof Player attacker) {
+            if (!attacker.getInventory().getItemInMainHand().containsEnchantment(Registry.ENCHANTMENT.get(key))) return;
+
             for (ItemStack drop : drops) {
+                if (drop.containsEnchantment(Registry.ENCHANTMENT.get(SoulboundEnchantment.key))) {
+                    itemsToKeep.add(drop);
+                    continue;
+                };
+
                 Utils.giveOrDrop(attacker, attacker.getLocation(), drop);
             }
 
             drops.clear();
+
+            if (event.getEntity() instanceof Player victim) {
+                ((PlayerDeathEvent) event).getItemsToKeep().addAll(itemsToKeep);
+            }
         }
 
     }

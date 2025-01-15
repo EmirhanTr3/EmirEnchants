@@ -43,7 +43,7 @@ public class EnderVisionEnchantment extends CustomEnchantment implements Listene
         if (!(event.getEntity() instanceof LivingEntity) || event.getTarget() == null) return;
         LivingEntity entity = (LivingEntity) event.getEntity();
         LivingEntity target = event.getTarget();
-        if (!target.getEquipment().getHelmet().containsEnchantment(Registry.ENCHANTMENT.get(key))) return;
+        if (target.getEquipment().getHelmet() == null || !target.getEquipment().getHelmet().containsEnchantment(Registry.ENCHANTMENT.get(key))) return;
 
         if (entity.getType() == EntityType.ENDERMAN) {
             event.setCancelled(true);
