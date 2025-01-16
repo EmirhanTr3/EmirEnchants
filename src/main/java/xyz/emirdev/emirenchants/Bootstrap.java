@@ -19,7 +19,6 @@ import org.bukkit.inventory.ItemType;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
-import xyz.emirdev.emirenchants.tags.ToolsTag;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -30,6 +29,7 @@ public class Bootstrap implements PluginBootstrap {
     @Override
     public void bootstrap(@NotNull BootstrapContext context) {
         final LifecycleEventManager<BootstrapContext> manager = context.getLifecycleManager();
+        EmirEnchants.config = new ConfigHandler();
 
         manager.registerEventHandler(LifecycleEvents.TAGS.preFlatten(RegistryKey.ITEM), event -> {
             final PreFlattenTagRegistrar<ItemType> registrar = event.registrar();
@@ -76,6 +76,11 @@ public class Bootstrap implements PluginBootstrap {
                 continue;
             }
 
+            if (EmirEnchants.getPluginConfig().getDisabledEnchants().contains(key.key().value())) {
+                context.getLogger().info("Skipping " + key.key().value() + " because its disabled in config.");
+                continue;
+            };
+
             EmirEnchants.enchantments.add(key);
         }
         context.getLogger().info("Loaded list of all enchantments.");
@@ -95,6 +100,11 @@ public class Bootstrap implements PluginBootstrap {
                     context.getLogger().error("Couldn't find the enchantment key in "+className+": ", e);
                     continue;
                 }
+
+                if (EmirEnchants.getPluginConfig().getDisabledEnchants().contains(key.key().value())) {
+                    context.getLogger().info("Skipping " + key.key().value() + " because its disabled in config.");
+                    continue;
+                };
 
                 // get builder method
                 Method builderMethod;

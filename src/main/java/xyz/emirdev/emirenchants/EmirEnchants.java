@@ -4,6 +4,7 @@ import io.papermc.paper.registry.TypedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
@@ -19,11 +20,12 @@ import java.util.logging.Logger;
 public final class EmirEnchants extends JavaPlugin {
     public static EmirEnchants instance;
     public static Logger logger;
+    public static ConfigHandler config;
     public static List<TypedKey<Enchantment>> enchantments = new ArrayList<>();
 
     public static EmirEnchants getInstance() throws IllegalStateException {
         if (instance == null) {
-            throw new IllegalStateException("The instance of EmirUtils is null!");
+            throw new IllegalStateException("The instance of EmirEnchants is null!");
         }
         return instance;
     }
@@ -36,6 +38,10 @@ public final class EmirEnchants extends JavaPlugin {
         return logger;
     }
 
+    public static ConfigHandler getPluginConfig() {
+        return config;
+    }
+
     @Override
     public void onEnable() {
         this.instance = this;
@@ -45,6 +51,21 @@ public final class EmirEnchants extends JavaPlugin {
 
         for (Class<?> clazz: new Reflections("xyz.emirdev.emirenchants.enchantments", new SubTypesScanner(false))
                 .getSubTypesOf(CustomEnchantment.class)) {
+            String className = clazz.getName().replace("xyz.emirdev.emirenchants.enchantments.", "");
+
+            // get enchantment key
+            TypedKey<Enchantment> key;
+            try {
+                key = (TypedKey<Enchantment>) clazz.getDeclaredField("key").get(null);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                getLogger().log(Level.SEVERE, "Couldn't find the enchantment key in "+className+": ", e);
+                continue;
+            }
+
+            if (EmirEnchants.getPluginConfig().getDisabledEnchants().contains(key.key().value())) {
+                getLogger().info("Skipping " + key.key().value() + " because its disabled in config.");
+                continue;
+            };
 
             try {
                 Method initMethod = clazz.getDeclaredMethod("run");
