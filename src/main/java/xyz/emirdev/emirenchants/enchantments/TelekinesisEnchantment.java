@@ -56,20 +56,13 @@ public class TelekinesisEnchantment extends CustomEnchantment implements Listene
         PlayerInventory inventory = player.getInventory();
         if (!inventory.getItemInMainHand().containsEnchantment(Registry.ENCHANTMENT.get(key))) return;
 
+        if (event.getBlock().getState() instanceof Container) return;
+
         Collection<ItemStack> drops = event.getBlock().getDrops(inventory.getItemInMainHand(), player);
         event.setDropItems(false);
 
         for (ItemStack drop : drops) {
             Utils.giveOrDrop(player, event.getBlock(), drop);
-        }
-
-        if (event.getBlock().getState() instanceof Container container) {
-            Inventory blockInventory = container.getInventory();
-            List<ItemStack> blockInventoryContents = Arrays.stream(blockInventory.getContents()).filter(item -> item != null).toList();
-
-            for (ItemStack item : blockInventoryContents) {
-                Utils.giveOrDrop(player, event.getBlock(), item);
-            }
         }
 
         if (event.getBlock().getState() instanceof Jukebox jukebox) {
