@@ -15,6 +15,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -48,8 +49,9 @@ public class TelekinesisEnchantment extends CustomEnchantment implements Listene
                 .exclusiveWith(RegistrySet.keySet(RegistryKey.ENCHANTMENT, SmeltingEnchantment.key));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onBlockBreak(BlockBreakEvent event) {
+        if (event.isCancelled()) return;
         if (!event.isDropItems()) return;
         Player player = event.getPlayer();
         if (player.getGameMode() == GameMode.CREATIVE) return;
